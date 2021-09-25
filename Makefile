@@ -3,7 +3,7 @@
 DOCKER_COMPOSE=docker-compose
 DOCKER_COMPOSE_EXEC=$(DOCKER_COMPOSE) exec
 PHP_DOCKER_COMPOSE_EXEC=$(DOCKER_COMPOSE_EXEC) php
-NODE_DOCKER_COMPOSE_RUN=$(DOCKER_COMPOSE) run --rm --no-deps node
+NODE_DOCKER_COMPOSE_RUN=$(DOCKER_COMPOSE) run --rm node
 COMPOSER=$(PHP_DOCKER_COMPOSE_EXEC) php -d memory_limit=-1 /usr/local/bin/composer
 SYMFONY_CONSOLE=$(PHP_DOCKER_COMPOSE_EXEC) bin/console
 
@@ -35,18 +35,16 @@ clean-vendor: cc-hard ## Suppression du répertoire vendor puis un réinstall
 	$(COMPOSER) install
 
 node-modules-install: ## installation des modules node
-	$(NODE_DOCKER_COMPOSE_RUN) bash -ci 'yarn install'
+	$(NODE_DOCKER_COMPOSE_RUN)
 
 node-modules-build: ## Build assets with node container
-	$(NODE_DOCKER_COMPOSE_RUN) bash -ci 'yarn dev'
+	$(NODE_DOCKER_COMPOSE_RUN) npm run build:dev
 
 node-modules-watch: ## Run Webpack in watch mode
-	$(NODE_DOCKER_COMPOSE_RUN) bash -ci 'yarn watch'
+	$(NODE_DOCKER_COMPOSE_RUN) npm run build:watch
 
-clean-node-modules: cc-hard ## Suppression du répertoire vendor puis un réinstall
-	$(NODE_DOCKER_COMPOSE_EXEC) rm -Rf node_modules
-	$(NODE_DOCKER_COMPOSE_EXEC) rm yarn.lock
-	node-modules-install
+clean-node-modules: cc-hard ## Suppression du répertoire node_module puis un réinstall
+	$(NODE_DOCKER_COMPOSE_RUN) rm -Rf ./node_modules/*
 
 cc:	## Vider le cache
 	$(SYMFONY_CONSOLE) c:c
