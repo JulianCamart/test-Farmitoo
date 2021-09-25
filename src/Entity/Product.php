@@ -15,16 +15,16 @@ class Product
     protected $price;
 
     /**
-     * @var string
+     * @var Brand
      */
     protected $brand;
 
     /**
      * @param string $title
      * @param int $price
-     * @param string $brand
+     * @param Brand $brand
      */
-    public function __construct(string $title, int $price, string $brand)
+    public function __construct(string $title, int $price, Brand $brand)
     {
         $this->title = $title;
         $this->price = $price;

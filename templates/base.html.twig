@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            {% block header %}
+                {{ include('_header.html.twig') }}
+            {% endblock %}
+        </header>
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+        <footer class="position-absolute bottom-0 bg-light w-100">
+            {% block footer %}
+                {{ include('_footer.html.twig') }}
+            {% endblock %}
+        </footer>
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </body>
+</html>

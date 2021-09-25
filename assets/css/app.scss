@@ -1,0 +1,21 @@
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+
+.fs-24 {
+  font-size: 24px !important;
+}
+
+.h-40px {
+  height: 40px !important;
+}
+
+.w-40px {
+  width: 40px !important;
+}
+
+footer .icon-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
