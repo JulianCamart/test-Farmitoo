@@ -1,6 +1,6 @@
 .PHONY: help
 .DEFAULT_GOAL = help
-DOCKER_COMPOSE=docker-compose
+DOCKER_COMPOSE=docker-compose -p test_farmitoo
 DOCKER_COMPOSE_EXEC=$(DOCKER_COMPOSE) exec
 PHP_DOCKER_COMPOSE_EXEC=$(DOCKER_COMPOSE_EXEC) php
 NODE_DOCKER_COMPOSE_RUN=$(DOCKER_COMPOSE) run --rm node
@@ -8,6 +8,12 @@ COMPOSER=$(PHP_DOCKER_COMPOSE_EXEC) php -d memory_limit=-1 /usr/local/bin/compos
 SYMFONY_CONSOLE=$(PHP_DOCKER_COMPOSE_EXEC) bin/console
 
 ## —— Docker 🐳  ———————————————————————————————————————————————————————————————
+install: start node-install node-build vendor-install create-db ## Installation du projet
+
+uninstall: clean-vendor clean-node rm ## Désinstallation du projet
+	sudo rm -Rf ./data/
+	rm -Rf ./var/
+
 start:	## Lancer les containers docker
 	$(DOCKER_COMPOSE) up -d
 
@@ -31,20 +37,21 @@ vendor-update:	## Mise à jour des vendors
 
 clean-vendor: cc-hard ## Suppression du répertoire vendor puis un réinstall
 	$(PHP_DOCKER_COMPOSE_EXEC) rm -Rf vendor
-	$(PHP_DOCKER_COMPOSE_EXEC) rm composer.lock
-	$(COMPOSER) install
+	sudo rm -Rf ./vendor
 
-node-modules-install: ## installation des modules node
+node-install: ## installation des modules node
 	$(NODE_DOCKER_COMPOSE_RUN)
 
-node-modules-build: ## Build assets with node container
-	$(NODE_DOCKER_COMPOSE_RUN) npm run build:dev
+node-build-dev: ## Build assets with node container
+	$(NODE_DOCKER_COMPOSE_RUN) npm run dev
 
-node-modules-watch: ## Run Webpack in watch mode
-	$(NODE_DOCKER_COMPOSE_RUN) npm run build:watch
+node-watch: ## Run Webpack in watch mode
+	$(NODE_DOCKER_COMPOSE_RUN) npm run watch
 
-clean-node-modules: cc-hard ## Suppression du répertoire node_module puis un réinstall
-	$(NODE_DOCKER_COMPOSE_RUN) rm -Rf ./node_modules/*
+clean-node: cc-hard ## Suppression du répertoire node_module puis un réinstall
+	$(NODE_DOCKER_COMPOSE_RUN) rm -Rf ./node_modules/
+	sudo rm -Rf ./node_modules/
+	sudo rm -Rf ./public/build/
 
 cc:	## Vider le cache
 	$(SYMFONY_CONSOLE) c:c
@@ -60,6 +67,11 @@ migration: ## Supprimer le répertoire cache
 
 migrate:
 	$(SYMFONY_CONSOLE) d:m:m --no-interaction --no-interaction
+
+create-db: ## Créer la base de donnée et charger les fixtures
+	$(SYMFONY_CONSOLE) d:d:c
+	$(SYMFONY_CONSOLE) d:m:m --no-interaction
+	$(SYMFONY_CONSOLE) d:f:l --no-interaction
 
 clean-db: ## Réinitialiser la base de donnée
 	- $(SYMFONY_CONSOLE) d:d:d --force --connection

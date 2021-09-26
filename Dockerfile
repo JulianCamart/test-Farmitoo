@@ -50,17 +50,3 @@ RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
 # cela va permettre que les fichiers qui sont créés dans le contenaire auront vos droits
 RUN addgroup --system julian --gid 1000 && adduser --system julian --uid 1000 --ingroup julian
 
-FROM node:12
-
-RUN apt-get update && \
-	apt-get install -y \
-		curl \
-		apt-transport-https
-
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-	echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
-RUN apt-get update && apt-get install -y
-
-WORKDIR /var/www/
-

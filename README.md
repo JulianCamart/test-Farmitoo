@@ -1,3 +1,6 @@
+#I#nit project
+```make start && make vendor-install && make node-modules-install && make node-modules-build```
+
 # TEST
 
 Ceci est le repository pour le test technique de Farmitoo.

@@ -1,5 +1,4 @@
-.idea
-
+.idea/
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -22,7 +21,6 @@
 ###< symfony/phpunit-bridge ###
 
 ###> symfony/webpack-encore-bundle ###
-package-lock.json
 /node_modules/
 /public/build/
 npm-debug.log
