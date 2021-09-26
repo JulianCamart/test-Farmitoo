@@ -1,5 +1,18 @@
-#I#nit project
-```make start && make vendor-install && make node-modules-install && make node-modules-build```
+## Initialiser le projet
+Requis:
+1. docker
+2. docker-compose
+3. make
+
+Lancer la commande
+
+```make install && sleep 30 && make create-db```
+
+Cela va build les container docker, y installer les dépendances et initialiser la base de données
+
+### Désinstaller
+Pour couper et supprimer les container lancer
+```make uninstall```
 
 # TEST
 

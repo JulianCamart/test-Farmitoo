@@ -31,6 +31,5 @@ services:
     image: node:12.16.3-alpine3.11
     volumes:
       - ./:/var/www/
-    command: npm install
     working_dir: /var/www
     user: 1000:10000

@@ -8,7 +8,7 @@ COMPOSER=$(PHP_DOCKER_COMPOSE_EXEC) php -d memory_limit=-1 /usr/local/bin/compos
 SYMFONY_CONSOLE=$(PHP_DOCKER_COMPOSE_EXEC) bin/console
 
 ## —— Docker 🐳  ———————————————————————————————————————————————————————————————
-install: start node-install node-build vendor-install create-db ## Installation du projet
+install: start node-install node-build-dev vendor-install ## Installation du projet
 
 uninstall: clean-vendor clean-node rm ## Désinstallation du projet
 	sudo rm -Rf ./data/
@@ -40,7 +40,7 @@ clean-vendor: cc-hard ## Suppression du répertoire vendor puis un réinstall
 	sudo rm -Rf ./vendor
 
 node-install: ## installation des modules node
-	$(NODE_DOCKER_COMPOSE_RUN)
+	$(NODE_DOCKER_COMPOSE_RUN) npm install
 
 node-build-dev: ## Build assets with node container
 	$(NODE_DOCKER_COMPOSE_RUN) npm run dev
