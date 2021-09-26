@@ -2,41 +2,61 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProductRepository;
+
+/**
+ * @ORM\Entity(repositoryClass=BrandRepository::class)
+ */
 class Product
 {
-    /**
-     * @var string
-     */
-    protected $title;
+    use ResourceId;
 
     /**
-     * @var int
+     * @ORM\Column(type="string", length=255)
      */
-    protected $price;
+    protected string $title;
 
     /**
-     * @var Brand
+     * @ORM\Column(type="float", scale=2)
      */
-    protected $brand;
+    protected float $price;
 
     /**
-     * @param string $title
-     * @param int $price
-     * @param Brand $brand
+     * @ORM\Column(type="string", length=255)
      */
-    public function __construct(string $title, int $price, Brand $brand)
+    protected string $image;
+
+    /**
+    * @ORM\ManyToOne(targetEntity=Brand::class)
+    */
+    protected Brand $brand;
+
+    public function __construct(string $title, float $price, string $image, Brand $brand)
     {
         $this->title = $title;
         $this->price = $price;
+        $this->image = $image;
         $this->brand = $brand;
     }
 
-
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    public function getBrand(): Brand
+    {
+        return $this->brand;
     }
 }

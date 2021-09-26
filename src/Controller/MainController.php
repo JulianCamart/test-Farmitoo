@@ -17,18 +17,7 @@ class MainController extends AbstractController
      */
     public function index()
     {
-        $brand1 = new Brand('Farmitoo');
-        $brand2 = new Brand('Gallagher');
-
-        $product1 = new Product('Cuve à gasoil', 250000, $brand1);
-        $product2 = new Product('Nettoyant pour cuve', 5000, $brand1);
-        $product3 = new Product('Piquet de clôture', 1000, $brand2);
-
-        $promotion1 = new Promotion(50000, 8, false);
-
-        $item1 = new Item($product1, 1);
-        $item2 = new Item($product2, 3);
-        $item3 = new Item($product3, 5);
+        //$promotion1 = new Promotion(50000, 8, false);
 
         // Je passe une commande avec
         // Cuve à gasoil x1
