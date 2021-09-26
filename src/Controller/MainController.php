@@ -2,12 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Brand;
-use App\Entity\Item;
-use App\Entity\Product;
-use App\Entity\Promotion;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
@@ -15,8 +11,10 @@ class MainController extends AbstractController
     /**
      * @Route(name="index", path="/")
      */
-    public function index()
+    public function index(ProductRepository $productRepository)
     {
+        $products = $productRepository->findBy([], ['title' => 'ASC']);
+
         //$promotion1 = new Promotion(50000, 8, false);
 
         // Je passe une commande avec
@@ -24,7 +22,8 @@ class MainController extends AbstractController
         // Nettoyant pour cuve x3
         // Piquet de clôture x5
 
-        return $this->render('base.html.twig', [
+        return $this->render('index/index.html.twig', [
+            'products' => $products,
         ]);
     }
 }

@@ -3,4 +3,9 @@
 {% block title %}Liste des produits - Farmitoo{% endblock %}
 
 {% block body %}
+    <div class="row">
+        {% for product in products %}
+            {% embed 'components/_product_card.html.twig' %}{% endembed %}
+        {% endfor %}
+    </div>
 {% endblock %}

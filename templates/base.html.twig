@@ -14,9 +14,11 @@
             {% endblock %}
         </header>
         <main>
-            {% block body %}{% endblock %}
+            <div class="container">
+                {% block body %}{% endblock %}
+            </div>
         </main>
-        <footer class="position-absolute bottom-0 bg-light w-100">
+        <footer class="bg-light w-100">
             {% block footer %}
                 {{ include('_footer.html.twig') }}
             {% endblock %}

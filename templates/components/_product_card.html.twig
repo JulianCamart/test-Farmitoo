@@ -1,0 +1,10 @@
+<div class="col-12 col-md-6 col-xl-4 mb-4">
+    <div class="card">
+        <img class="card-img-top object-contain h-300px" src="{{ asset(product.image|img) }}" alt="photo du produit {{ product.title }}">
+        <div class="card-body">
+            <h5 class="card-title h-48px">{{ product.title }} - {{ product.brand.title }}</h5>
+            <p>{{ product.price|price(2, ',', ' ') }}</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+</div>
