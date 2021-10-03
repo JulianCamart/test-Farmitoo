@@ -1,0 +1,281 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier - Farmitoo{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Panier</h1>
+    {% if cart.items is not empty %}
+        <div class="row mb-4">
+            <h3>Produits</h3>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header p-0 overflow-hidden">
+                        <div class="row py-3">
+                            <div class="col-3 col-md-2 offset-md-2 text-center">
+                                <span>Produit</span>
+                            </div>
+                            <div class="col-3 col-md-2 text-center">
+                                <span>Marque</span>
+                            </div>
+                            <div class="col-2 text-center">
+                                <span>Prix unitaire</span>
+                            </div>
+                            <div class="col-2 text-center">
+                                <span>Quantité</span>
+                            </div>
+                            <div class="col-2 text-center">
+                                <span>Prix total HT</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0 overflow-hidden">
+                        {% for item in cart.items %}
+                            <div class="row {{ not loop.last ? 'border-bottom' : '' }}">
+                                <div class="col-2 d-none d-md-flex justify-content-center align-items-center">
+                                    <img class="object-contain h-100px p-2" alt="photo du produit {{ item.product.title }}"
+                                         src="{{ asset(item.product.image|img) }}">
+                                </div>
+                                <div class="col-3 col-md-2 d-flex align-items-center justify-content-center text-center">
+                                    <span>{{ item.product.title }}</span>
+                                </div>
+                                <div class="col-3 col-md-2 d-flex align-items-center justify-content-center">
+                                    <span>{{ item.product.brand.title }}</span>
+                                </div>
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <span>{{ item.product.price|price(2, ',', ' ') }}</span>
+                                </div>
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <span>{{ item.quantity }}</span>
+                                </div>
+                                <div class="col-2 d-flex flex-column align-items-center justify-content-center">
+                                    {% if cart.hasValidPromotion %}
+                                        <span><s>{{ item.totalPrice|price(2, ',', ' ') }}</s></span>
+                                        <span class="fw-bolder">{{ item.totalPriceAfterPromotion|price(2, ',', ' ') }}</span>
+                                    {% else %}
+                                        <span class="fw-bolder">{{ item.totalPrice|price(2, ',', ' ') }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer p-0 overflow-hidden">
+                        <div class="row py-3">
+                            <div class="col-3 col-md-2 text-center">
+                                <span class="fw-bolder">Sous Total HT</span>
+                            </div>
+                            <div class="offset-6  col-3 offset-md-8 col-md-2  text-center">
+                                {% if cart.hasValidPromotion %}
+                                    <span><s>{{ cart.itemsPrice|price(2, ',', ' ') }}</s></span>
+                                {% else %}
+                                    <span class="fw-bolder">{{ cart.itemsPrice|price(2, ',', ' ') }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if app.request.get('promotions', null) %}
+            <div class="row mb-4">
+                <h3>Promotions</h3>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header p-0 overflow-hidden">
+                            <div class="row justify-content-between py-3">
+                                <div class="col-3 col-md-2 text-center">
+                                    <span>Condition</span>
+                                </div>
+
+                                <div class="col-3 offset-md-3 col-md-2 text-center">
+                                    <span>Frais de livraison</span>
+                                </div>
+
+                                <div class="col-3 offset-md-1 col-md-2 text-center">
+                                    <span>Reduction</span>
+                                </div>
+
+                                <div class="col-3 col-md-2 text-center">
+                                    <span>Gains</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0 overflow-hidden">
+                            {% for promotion in cart.promotions %}
+                                {% if promotion.isActive %}
+                                    <div class="row {{ not loop.last ? 'border-bottom' : '' }} py-3">
+                                        <div class="col-3 col-md-2 d-flex align-items-center justify-content-center">
+                                            <span class="text-center text-success">Minimum d'achat : {{ promotion.minAmount }}</span>
+                                        </div>
+
+                                        <div class="col-3 offset-md-3 col-md-2 d-flex align-items-center justify-content-center">
+                                            <span class="fw-bolder">{{ promotion.freeDelivery ? 'Offert' : '' }}</span>
+                                        </div>
+
+                                        <div class="col-3 offset-md-1 col-md-2 d-flex align-items-center justify-content-center">
+                                            <span>{{ promotion.reduction }} %</span>
+                                        </div>
+
+                                        <div class="col-3 col-md-2 d-flex align-items-center justify-content-center">
+                                            <span class="text-success">- {{ promotion.amount }}</span>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="row {{ not loop.last ? 'border-bottom' : '' }} py-3">
+                                        <div class="col-3 col-md-2 d-flex flex-column align-items-center justify-content-center">
+                                            <span class="text-center text-danger">Minimum d'achat : {{ promotion.minAmount }}</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="card-footer p-0 overflow-hidden">
+                            <div class="row py-3">
+                                <div class="col-3 col-md-2 text-center">
+                                    <span class="fw-bolder">Sous Total HT</span>
+                                </div>
+                                <div class="offset-6 col-3 offset-md-8 col-md-2 text-center">
+                                    <span class="fw-bolder">{{ cart.itemsPriceAfterPromotion|price(2, ',', ' ') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row mb-4">
+            <h3>Frais de livraison</h3>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header p-0 overflow-hidden">
+                        <div class="row justify-content-between py-3">
+                            <div class="col-3 col-md-2 text-center">
+                                <span>Marque</span>
+                            </div>
+                            <div class="offset-6 col-3 offset-md-8 col-md-2 text-center">
+                                <span>Coût HT</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0 overflow-hidden">
+                        {% for deliveringFee in cart.deliveringFees %}
+                            <div class="row {{ not loop.last ? 'border-bottom' : '' }} py-3">
+                                <div class="col-3 col-md-2 d-flex align-items-center justify-content-center">
+                                    <span class="text-center">{{ deliveringFee.brand.title }}</span>
+                                </div>
+                                <div class="offset-6 col-3 offset-md-8 col-md-2 d-flex align-items-center justify-content-center">
+                                    <span>
+                                        {% set value = deliveringFee.cost|price(2, ',', ' ') %}
+                                        {% if cart.freeDeliveringFees %}
+                                            <span><s>{{ value }}</s></span>
+                                        {% else %}
+                                            <span class="fw-bolder">{{ value }}</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer p-0 overflow-hidden">
+                        <div class="row justify-content-between border-bottom py-3">
+                            <div class="col-3 col-md-2 d-flex align-items-center justify-content-center">
+                                <span>Frais</span>
+                            </div>
+                            <div class="offset-6 col-3 offset-md-8 col-md-2 d-flex flex-column justify-content-center align-items-center">
+                                {% if cart.freeDeliveringFees %}
+                                    <span><s>{{ cart.deliveringFeesTotal|price(2, ',', ' ') }}</s></span>
+                                    <span class="fw-bolder text-success">Offert</span>
+                                {% else %}
+                                    <span class="fw-bolder">{{ cart.deliveringFeesTotal|price(2, ',', ' ') }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row py-3">
+                            <div class="col-3 col-md-2 text-center">
+                                <span class="fw-bolder">Total HT</span>
+                            </div>
+                            <div class="offset-6 col-3 offset-md-8 col-md-2 text-center">
+                                <span class="fw-bolder">{{ cart.priceIncludeDeliveringFees|price(2, ',', ' ') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <h3>TVA</h3>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header p-0 overflow-hidden">
+                        <div class="row py-3">
+                            <div class="col-3 col-md-2 text-center">
+                                <span>Marque</span>
+                            </div>
+                            <div class="offset-3 col-3 offset-md-6 col-md-2 text-center">
+                                <span>TVA</span>
+                            </div>
+                            <div class="col-3 col-md-2 text-center">
+                                <span>Coût TTC </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0 overflow-hidden">
+                        {% for vatFee in cart.vatFees %}
+                            <div class="row {{ not loop.last ? 'border-bottom' : '' }} py-3">
+                                <div class="col-3 col-md-2 d-flex align-items-center justify-content-center">
+                                    <span class="text-center">{{ vatFee.brand.title }}</span>
+                                </div>
+                                <div class="offset-3 col-3 offset-md-6 col-md-2 d-flex align-items-center justify-content-center">
+                                    <span class="text-center">{{ vatFee.percent }} %</span>
+                                </div>
+                                <div class="col-3 col-md-2 d-flex align-items-center justify-content-center">
+                                    <span>{{ vatFee.cost|price(2, ',', ' ') }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer p-0 overflow-hidden">
+                        <div class="row justify-content-between border-bottom py-3">
+                            <div class="col-3 col-md-2 text-center">
+                                <span>Total TVA</span>
+                            </div>
+                            <div class="offset-6 col-3 offset-md-8 col-md-2 text-center">
+                                <span>{{ cart.vatFeesTotal|price(2, ',', ' ') }}</span>
+                            </div>
+                        </div>
+                        <div class="row py-3">
+                            <div class="col-3 col-md-2 text-center">
+                                <span class="fw-bolder fs-18">Total TTC</span>
+                            </div>
+                            <div class="offset-6 col-3 offset-md-8 col-md-2 text-center">
+                                <span class="fw-bolder fs-18">{{ cart.priceIncludeVatFees|price(2, ',', ' ') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row d-flex">
+            <div class="w-75">
+                {% set promotions = app.request.get('promotions', []) %}
+
+                <a href="{{ path('cart', { 'promotions': 0 in promotions ? promotions|filter((v) => v != 0) : promotions|merge([0]) }) }}"
+                   class="btn btn-{{ 0 in promotions ? 'danger' : 'secondary' }}">{{ 0 in promotions ? 'Désactiver' : 'Activer' }} promotion 1</a>
+                <a href="{{ path('cart', { 'promotions': 1 in promotions ? promotions|filter((v) => v != 1) : promotions|merge([1]) }) }}"
+                   class="btn btn-{{ 1 in promotions ? 'danger' : 'secondary' }}">{{ 1 in promotions ? 'Désactiver' : 'Activer' }} promotion 2</a>
+            </div>
+
+            <div class="w-25 text-end">
+                <button type="button" class="btn btn-success fs-24">Payer</button>
+            </div>
+        </div>
+    {% else %}
+        <p>Votre panier est vide</p>
+    {% endif %}
+
+
+
+{% endblock %}

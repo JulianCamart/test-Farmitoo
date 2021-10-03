@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProductRepository;
 
 /**
- * @ORM\Entity(repositoryClass=BrandRepository::class)
+ * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
 class Product
 {
@@ -28,7 +28,7 @@ class Product
     protected string $image;
 
     /**
-    * @ORM\ManyToOne(targetEntity=Brand::class)
+    * @ORM\ManyToOne(targetEntity=Brand::class, fetch="EAGER")
     */
     protected Brand $brand;
 

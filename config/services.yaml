@@ -29,3 +29,14 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    _instanceof:
+        App\Factory\Fee\Delivery\Delivery:
+            tags: [ 'app.delivery_fee_instances' ]
+        App\Factory\Fee\Vat\Vat:
+            tags: [ 'app.vat_fee_instances' ]
+
+    App\Factory\Fee\FeeFactory:
+        arguments:
+            - !tagged_iterator app.delivery_fee_instances
+            - !tagged_iterator app.vat_fee_instances

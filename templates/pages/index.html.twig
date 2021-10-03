@@ -3,7 +3,8 @@
 {% block title %}Liste des produits - Farmitoo{% endblock %}
 
 {% block body %}
-    <div class="row">
+    <h1>Liste des produits</h1>
+    <div class="row mt-3">
         {% for product in products %}
             {% embed 'components/_product_card.html.twig' %}{% endembed %}
         {% endfor %}

@@ -3,9 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Brand;
-use App\Entity\Item;
 use App\Entity\Product;
-use App\Entity\Promotion;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
