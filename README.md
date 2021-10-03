@@ -9,9 +9,10 @@ Lancer la commande
 ```make install && sleep 30 && make create-db```
 
 Cela va build les container docker, y installer les dépendances et initialiser la base de données
+Le projet sera accessible sur le port 8888 -> http://localhost:8888/
 
 ### Désinstaller
-Pour couper et supprimer les container lancer
+Pour couper/supprimer les container et supprimer les dependances lancer
 ```make uninstall```
 
 # TEST
